@@ -193,7 +193,7 @@ while running:
 
     enemy(7)
     Fuelfun()
-    player_velocity=1.5
+    player_velocity=2
     screen.blit(player,(player_x,player_y))
     if sc%(250*5)==0 and enemy_velocity<5 and score_value>0:
         enemy_velocity+=0.7
