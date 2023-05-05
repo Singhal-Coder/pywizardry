@@ -10,7 +10,8 @@ screen=p.display.set_mode((600,600))
 p.display.set_caption("Wrong Side")
 icon=p.image.load("D:\Python\Game\CAR GAME\gameicon.png")
 p.display.set_icon(icon)
-
+mixer.music.load("D:\Python\Game\CAR GAME\\background.mp3")
+mixer.music.play(-1)
 #PLayer
 player=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\player.png"),(50,90))
 player_velocity=0
@@ -20,7 +21,7 @@ playerx_change=0
 #Enemy
 enemyimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy1.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy2.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy3.png"),(50,80))]
 enemy_x=[121,195,275,353,430]
-enemy_velocity=2
+enemy_velocity=2.4
 List=[]
 counter=0
 clock=p.time.Clock()
@@ -141,12 +142,17 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
     distance=sqrt(pow(enemy_x-player_x,2)+pow(enemy_y-player_y,2))
     req=[player.get_width(),player.get_height(),ene.get_width(),ene.get_height()]
     if (abs(enemy_x-player_x)<=req[0] or abs(enemy_x-player_x)<=req[2]) and (abs(enemy_y-player_y)<=req[1]-15 or abs(enemy_y-player_y)<=req[3]-15) and distance<=73:
+        crashsound=mixer.Sound("D:\Python\Game\CAR GAME\crash.mp3")
+        crashsound.play()
+        mixer.music.stop()
         game_over_text()
     elif fuel!=[]:
         distance=sqrt(pow(fuel[0]['x']-player_x,2)+pow(fuel[0]['y']-player_y,2))
         req=[player.get_width(),player.get_height(),fuel[0]['img'].get_width(),fuel[0]['img'].get_height()]
         if (abs(fuel[0]['x']-player_x)<=req[0] or abs(fuel[0]['x']-player_x)<=req[2]) and (abs(fuel[0]['y']-player_y)<=req[1]-15 or abs(fuel[0]['y']-player_y)<=req[3]-15) and distance<=73:
             k=1
+            fuelsound=mixer.Sound("D:\Python\Game\CAR GAME\\fuel_sound.mp3")
+            fuelsound.play()
             fuel.pop()
     
 
@@ -203,5 +209,7 @@ while running:
     show_score(350,50)
     p.display.update()
     sc+=1
+    if sc%(250*13)==0:
+        mixer.music.rewind()
 p.quit()
 quit()
