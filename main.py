@@ -113,10 +113,11 @@ def tree():
 
 
 
+
 fuel=[]
 def Fuelfun():
     fuelcar={"x":random.choice(enemy_x),"y":random.randrange(-100,-1000,-150),"img":p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\fuelcar.png"),(50,80))}
-    if sc%(250*5)==0:
+    if sc%(250*4)==0:
         fuel.append(fuelcar)
     elif fuel!=[]:
         screen.blit(fuel[0]["img"],(fuel[0]['x'],fuel[0]['y']))
@@ -126,6 +127,23 @@ def Fuelfun():
                 List[j]['y']=random.randrange(-100,-1000,-150)
         if fuel[0]['y']>650:
             fuel.pop()
+
+            
+coin=[]
+def coinfun():
+    coins={"x":random.choice(enemy_x),"y":random.randrange(-100,-1000,-150),"img":p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\coin.png"),(50,80))}
+    if sc%(250*3.4)==0:
+        coin.append(coins)
+    elif coin!=[]:
+        screen.blit(coin[0]["img"],(coin[0]['x'],coin[0]['y']))
+        coin[0]['y']+=enemy_velocity
+        for j in range(len(List)):
+            if abs(coin[0]['y']-List[j]['y'])<=80 and coin[0]['x']==List[j]['x']:
+                List[j]['y']=random.randrange(-100,-1000,-150)
+        if coin[0]['y']>650:
+            coin.pop()
+
+
 
 
 #collision
@@ -141,6 +159,12 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
         if (abs(fuel[0]['x']-player_x)<=req[0] or abs(fuel[0]['x']-player_x)<=req[2]) and (abs(fuel[0]['y']-player_y)<=req[1]-15 or abs(fuel[0]['y']-player_y)<=req[3]-15) and distance<=73:
             k=1
             fuel.pop()
+    if coin!=[]:
+        distance=sqrt(pow(coin[0]['x']-player_x,2)+pow(coin[0]['y']-player_y,2))
+        req=[player.get_width(),player.get_height(),coin[0]['img'].get_width(),coin[0]['img'].get_height()]
+        if (abs(coin[0]['x']-player_x)<=req[0] or abs(coin[0]['x']-player_x)<=req[2]) and (abs(coin[0]['y']-player_y)<=req[1]-15 or abs(coin[0]['y']-player_y)<=req[3]-15) and distance<=73:
+            score_value+=3
+            coin.pop()
 
     
 
@@ -187,10 +211,11 @@ while running:
 
     enemy(7)
     Fuelfun()
+    coinfun()
     player_velocity=1.5
     screen.blit(player,(player_x,player_y))
-    if sc%(250*6)==0 and enemy_velocity<5 and score_value>0:
-        enemy_velocity+=0.5
+    if sc%(250*5)==0 and enemy_velocity<5 and score_value>0:
+        enemy_velocity+=0.7
     for i in List:
         
         iscollision(i['x'],i['y'],player_x,player_y,i['img'])
