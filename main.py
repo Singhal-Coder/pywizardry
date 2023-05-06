@@ -26,8 +26,13 @@ enemy_velocity=2.4
 List=[]
 counter=0
 clock=p.time.Clock()
+pol_img=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\police.png"),(50,80))
+police=[pol_img]
+occurance=[0.33,0.33,0.33,0.01]
+x=0
+police_sound=mixer.Sound("D:\Python\Game\CAR GAME\\audio\\police.wav")
 def enemy(no_of_enemies):
-    global counter
+    global counter,x
     clock.tick(60)
     for i in range(no_of_enemies):
         if counter<=no_of_enemies:
@@ -39,12 +44,30 @@ def enemy(no_of_enemies):
             counter+=1
         
         screen.blit(List[i]['img'],(List[i]['x'],List[i]['y']))
-        
+        if List[i]["img"]==pol_img:
+            List[i]['y']+=3
+
         if List[i]['y']>650:
+            if List[i]["img"]==pol_img:
+                police_sound.stop()
+                police.append(pol_img)
+                enemy_x.append(x)
+                occurance.append(0.01)
             List[i]['y']=random.randrange(-100,-1000,-150)
             List[i]['x']=random.choice(enemy_x)
-            List[i]["img"]=random.choice(enemyimg)
+            List[i]["img"]=random.choices(enemyimg+police,occurance,k=1)[0]
+            if List[i]["img"]==pol_img:
+                List[i]["y"]=-50
+                police.pop()
+                x=enemy_x.pop(enemy_x.index(List[i]['x']))
+                occurance.pop()
+        if List[i]['y']==-50 and List[i]["img"]==pol_img :
+            police_sound.play(-1)
+
         for j in range(len(List)):
+            if List[i]["img"]==pol_img:
+                if i!=j and List[i]['y']<List[j]['y']<550 and List[i]['x']==List[j]['x']:
+                    List[i]['y']-=3
             if abs(List[i]['y']-List[j]['y'])<=80 and List[i]['x']==List[j]['x'] and i!=j:
                 List[i]['y']=random.randrange(-100,-1000,-150)
         List[i]['y']+=enemy_velocity
@@ -119,14 +142,14 @@ def tree():
 fuel=[]
 def Fuelfun():
     fuelcar={"x":random.choice(enemy_x),"y":random.randrange(-100,-1000,-150),"img":p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\fuelcar.png"),(50,80))}
-    if sc%(250*4)==0:
+    if sc%(250*random.randint(3,6))==0:
         fuel.append(fuelcar)
     elif fuel!=[]:
         screen.blit(fuel[0]["img"],(fuel[0]['x'],fuel[0]['y']))
         fuel[0]['y']+=enemy_velocity
         for j in range(len(List)):
             if abs(fuel[0]['y']-List[j]['y'])<=80 and fuel[0]['x']==List[j]['x']:
-                List[j]['y']=random.randrange(-100,-1000,-150)
+                fuel[0]['y']=random.randrange(-100,-1000,-150)
         if fuel[0]['y']>650:
             fuel.pop()
 
