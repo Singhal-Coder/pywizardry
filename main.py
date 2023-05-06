@@ -18,6 +18,7 @@ player_velocity=0
 player_y=475
 player_x=275
 playerx_change=0
+x_velocity=3
 #Enemy
 enemyimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy1.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy2.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy3.png"),(50,80))]
 enemy_x=[121,195,275,353,430]
@@ -42,6 +43,7 @@ def enemy(no_of_enemies):
         if List[i]['y']>650:
             List[i]['y']=random.randrange(-100,-1000,-150)
             List[i]['x']=random.choice(enemy_x)
+            List[i]["img"]=random.choice(enemyimg)
         for j in range(len(List)):
             if abs(List[i]['y']-List[j]['y'])<=80 and List[i]['x']==List[j]['x'] and i!=j:
                 List[i]['y']=random.randrange(-100,-1000,-150)
@@ -63,7 +65,7 @@ def show_score(x, y):
 def game_over_text():
     global running
     over_text = over_font.render("GAME OVER", True, (255, 255, 255)) 
-
+    mixer.music.stop()
     player_velocity=0
     while running:
         screen.blit(over_text, (100, 250))
@@ -142,7 +144,6 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
     if (abs(enemy_x-player_x)<=req[0] or abs(enemy_x-player_x)<=req[2]) and (abs(enemy_y-player_y)<=req[1]-15 or abs(enemy_y-player_y)<=req[3]-15) and distance<=73:
         crashsound=mixer.Sound("D:\Python\Game\CAR GAME\\audio\crash.mp3")
         crashsound.play()
-        mixer.music.stop()
         game_over_text()
     elif fuel!=[]:
         distance=sqrt(pow(fuel[0]['x']-player_x,2)+pow(fuel[0]['y']-player_y,2))
@@ -180,9 +181,9 @@ while running:
             running=False
         elif event.type == p.KEYDOWN:
             if event.key==p.K_LEFT:
-                playerx_change=-2
+                playerx_change=-x_velocity
             if event.key==p.K_RIGHT:
-                playerx_change=2
+                playerx_change=x_velocity
         elif event.type == p.KEYUP:
             if event.key==p.K_LEFT:
                 playerx_change=0
@@ -200,6 +201,7 @@ while running:
     screen.blit(player,(player_x,player_y))
     if sc%(250*5)==0 and enemy_velocity<5 and score_value>0:
         enemy_velocity+=0.7
+        x_velocity+=0.3
     for i in List:
         
         iscollision(i['x'],i['y'],player_x,player_y,i['img'])
