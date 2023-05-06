@@ -194,7 +194,6 @@ while running:
         player_x = 120
     if player_x >=430:
         player_x = 430
-
     enemy(7)
     Fuelfun()
     player_velocity=2
