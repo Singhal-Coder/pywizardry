@@ -8,18 +8,18 @@ p.init()
 
 screen=p.display.set_mode((600,600))
 p.display.set_caption("Wrong Side")
-icon=p.image.load("D:\Python\Game\CAR GAME\gameicon.png")
+icon=p.image.load("D:\Python\Game\CAR GAME\sprites\gameicon.png")
 p.display.set_icon(icon)
-mixer.music.load("D:\Python\Game\CAR GAME\\background.mp3")
+mixer.music.load("D:\Python\Game\CAR GAME\\audio\\background.mp3")
 mixer.music.play(-1)
 #PLayer
-player=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\player.png"),(50,90))
+player=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\player.png"),(50,90))
 player_velocity=0
 player_y=475
 player_x=275
 playerx_change=0
 #Enemy
-enemyimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy1.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy2.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\enemy3.png"),(50,80))]
+enemyimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy1.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy2.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy3.png"),(50,80))]
 enemy_x=[121,195,275,353,430]
 enemy_velocity=2.4
 List=[]
@@ -58,12 +58,11 @@ def show_score(x, y):
         score_value+=1
 
     score = font.render("Score : " + str(score_value), True, (255, 255, 255))
-    screen.blit(score, (x, y))   #s o the blit copies the pixels of one image onto the other image
-                                #(x,y)  is the positional coordinates passed onto the blit for displaying the score at the speciifed poistion
+    screen.blit(score, (x, y))   
 
 def game_over_text():
     global running
-    over_text = over_font.render("GAME OVER", True, (255, 255, 255))  #True so that the text appears in a smooth or jagged way.
+    over_text = over_font.render("GAME OVER", True, (255, 255, 255)) 
 
     player_velocity=0
     while running:
@@ -76,10 +75,9 @@ def game_over_text():
 
                 break
                 
-    # del List
 
 #road
-roadimg=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\road.png"),(400,100))
+roadimg=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\road.png"),(400,100))
 L=[500,400,300,200,100,0,-100]
 def road():
     for i in range(len(L)):
@@ -90,10 +88,10 @@ def road():
 
 
 #tree
-treeimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\tree1.png"),(50,50)),
-        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\tree2.png"),(50,50)),
-        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\tree3.png"),(50,50)),
-        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\tree4.png"),(50,50))]
+treeimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\tree1.png"),(50,50)),
+        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\tree2.png"),(50,50)),
+        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\tree3.png"),(50,50)),
+        p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\tree4.png"),(50,50))]
 Tr=[]
 count=0
 def tree():
@@ -118,7 +116,7 @@ def tree():
 
 fuel=[]
 def Fuelfun():
-    fuelcar={"x":random.choice(enemy_x),"y":random.randrange(-100,-1000,-150),"img":p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\\fuelcar.png"),(50,80))}
+    fuelcar={"x":random.choice(enemy_x),"y":random.randrange(-100,-1000,-150),"img":p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\\fuelcar.png"),(50,80))}
     if sc%(250*4)==0:
         fuel.append(fuelcar)
     elif fuel!=[]:
@@ -142,7 +140,7 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
     distance=sqrt(pow(enemy_x-player_x,2)+pow(enemy_y-player_y,2))
     req=[player.get_width(),player.get_height(),ene.get_width(),ene.get_height()]
     if (abs(enemy_x-player_x)<=req[0] or abs(enemy_x-player_x)<=req[2]) and (abs(enemy_y-player_y)<=req[1]-15 or abs(enemy_y-player_y)<=req[3]-15) and distance<=73:
-        crashsound=mixer.Sound("D:\Python\Game\CAR GAME\crash.mp3")
+        crashsound=mixer.Sound("D:\Python\Game\CAR GAME\\audio\crash.mp3")
         crashsound.play()
         mixer.music.stop()
         game_over_text()
@@ -151,7 +149,7 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
         req=[player.get_width(),player.get_height(),fuel[0]['img'].get_width(),fuel[0]['img'].get_height()]
         if (abs(fuel[0]['x']-player_x)<=req[0] or abs(fuel[0]['x']-player_x)<=req[2]) and (abs(fuel[0]['y']-player_y)<=req[1]-15 or abs(fuel[0]['y']-player_y)<=req[3]-15) and distance<=73:
             k=1
-            fuelsound=mixer.Sound("D:\Python\Game\CAR GAME\\fuel_sound.mp3")
+            fuelsound=mixer.Sound("D:\Python\Game\CAR GAME\\audio\\fuel_sound.mp3")
             fuelsound.play()
             fuel.pop()
     
@@ -159,7 +157,7 @@ def iscollision(enemy_x,enemy_y,player_x,player_y,ene):
 
 
 
-Fuel=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\Fuel.png"),(50,90))
+Fuel=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\Fuel.png"),(50,90))
 
 sc=1
 running=True
