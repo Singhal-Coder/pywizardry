@@ -22,13 +22,13 @@ x_velocity=3
 #Enemy
 enemyimg=[p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy1.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy2.png"),(50,80)),p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\enemy3.png"),(50,80))]
 enemy_x=[121,195,275,353,430]
-enemy_velocity=2.4
+enemy_velocity=3.4
 List=[]
 counter=0
 clock=p.time.Clock()
 pol_img=p.transform.scale(p.image.load("D:\Python\Game\CAR GAME\sprites\police.png"),(50,80))
 police=[pol_img]
-occurance=[0.33,0.33,0.33,0.01]
+occurance=[0.32,0.32,0.32,0.04]
 x=0
 police_sound=mixer.Sound("D:\Python\Game\CAR GAME\\audio\\police.wav")
 def enemy(no_of_enemies):
@@ -89,6 +89,10 @@ def game_over_text():
     global running
     over_text = over_font.render("GAME OVER", True, (255, 255, 255)) 
     mixer.music.stop()
+    for i in List:
+        if i['img'] is pol_img:
+            police_sound.stop()
+
     player_velocity=0
     while running:
         screen.blit(over_text, (100, 250))
@@ -220,11 +224,11 @@ while running:
         player_x = 430
     enemy(7)
     Fuelfun()
-    player_velocity=2
+    player_velocity=2.9
     screen.blit(player,(player_x,player_y))
     if sc%(250*5)==0 and enemy_velocity<5 and score_value>0:
         enemy_velocity+=0.7
-        x_velocity+=0.3
+        x_velocity+=0.6
     for i in List:
         
         iscollision(i['x'],i['y'],player_x,player_y,i['img'])
